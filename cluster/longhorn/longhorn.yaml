@@ -1,0 +1,15 @@
+defaultSettings:
+  defaultDataPath: "/longhorn"
+  defaultReplicaCount: 2
+  nodeDrainPolicy: "always-allow"
+persistence:
+  defaultClassReplicaCount: 2
+serviceMonitor:
+  enabled: true
+csi:
+  attacherReplicaCount: 2
+  provisionerReplicaCount: 2
+  resizerReplicaCount: 2
+  snapshotterReplicaCount: 2
+longhornUI:
+  replicas: 1
