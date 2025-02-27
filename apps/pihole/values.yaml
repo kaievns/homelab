@@ -1,0 +1,33 @@
+# replicaCount: 1
+# maxUnavailable: 0
+
+DNS1: 9.9.9.9
+DNS2: 1.1.1.1
+
+ingress:
+  enabled: true
+  hosts:
+    - pihole.homelab
+  pathType: Prefix
+
+persistentVolumeClaim:
+  enabled: true
+  storageClass: longhorn
+
+admin:
+  # use the secret we just created
+  existingSecret: "pihole-admin"
+
+serviceDns:
+  mixedService: true
+  type: ClusterIP
+
+serviceDhcp:
+  enabled: false
+
+podDnsConfig:
+  enabled: true
+  policy: "None"
+  nameservers:
+    - 127.0.0.1
+    - 9.9.9.9

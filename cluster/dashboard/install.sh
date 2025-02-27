@@ -8,3 +8,5 @@ helm repo update
 helm install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
   -n kubernetes-dashboard --create-namespace \
   -f cluster/dashboard/values.yaml
+
+kubectl apply -f "$(dirname -- "$0")/crds.yaml"

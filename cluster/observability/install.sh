@@ -12,3 +12,5 @@ helm install prometheus-stack prometheus-community/kube-prometheus-stack \
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install loki grafana/loki-stack -n observability -f cluster/observability/loki.yaml
+
+kubectl apply -f "$(dirname -- "$0")/crds.yaml"

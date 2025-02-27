@@ -12,6 +12,27 @@ spec:
     providers:
       kubernetesCRD:
         allowCrossNamespace: true
+    ports:
+      ssh:
+        port: 22
+        expose: 
+          default: true
+        exposedPort: 22
+      dns:
+        port: 53
+        expose: 
+          default: true
+        exposedPort: 53
+        protocol: TCP
+      dns-udp:
+        port: 53
+        expose: 
+          default: true
+        exposedPort: 53
+        protocol: UDP
+    service:
+      annotations:
+        metallb.universe.tf/loadBalancerIPs: 192.168.68.33
 ---
 apiVersion: v1
 kind: Service
