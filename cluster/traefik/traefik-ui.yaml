@@ -39,6 +39,7 @@ metadata:
   namespace: kube-system
   annotations:
     spec.ingressClassName: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: default-basic-auth@kubernetescrd
 spec:
   rules:
     - host: traefik.homelab

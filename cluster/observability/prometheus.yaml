@@ -11,6 +11,8 @@ prometheus:
     enabled: true
     hosts:
       - prometheus.homelab
+    annotations:
+      traefik.ingress.kubernetes.io/router.middlewares: default-basic-auth@kubernetescrd
 
   prometheusSpec:
     retention: 7d
@@ -34,6 +36,8 @@ grafana:
     enabled: true
     hosts:
       - grafana.homelab
+    annotations:
+      traefik.ingress.kubernetes.io/router.middlewares: default-basic-auth@kubernetescrd
   grafana.ini:
     users:
       viewers_can_edit: true

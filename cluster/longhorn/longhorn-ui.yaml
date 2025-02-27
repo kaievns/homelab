@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: longhorn
   namespace: longhorn
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-basic-auth@kubernetescrd
 spec:
   rules:
     - host: longhorn.homelab
