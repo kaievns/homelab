@@ -12,6 +12,13 @@ spec:
     providers:
       kubernetesCRD:
         allowCrossNamespace: true
+    metrics:
+      prometheus:
+        service:
+          enabled: true
+    logs:
+      access:
+        enabled: true
     ports:
       ssh:
         port: 22

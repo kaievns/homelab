@@ -1,0 +1,65 @@
+gitea:
+  admin:
+    existingSecret: admin-creds
+    email: hi@kaievans.co
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+  config:
+    server:
+      DOMAIN: gitea.homelab
+      HTTP_PORT: 3000
+      DISABLE_REGISTRATION: true
+
+service:
+  http:
+    port: 80
+    type: ClusterIP
+    clusterIP:
+    # type: LoadBalancer
+    # annotations:
+    #   lbipam.cilium.io/sharing-key: gitea
+    #   lbipam.cilium.io/ips: 192.168.68.44
+  ssh:
+    port: 22
+    type: ClusterIP
+    clusterIP:
+    # type: LoadBalancer
+    # annotations:
+    #   lbipam.cilium.io/sharing-key: gitea
+    #   lbipam.cilium.io/ips: 192.168.68.44
+
+postgresql:
+  enabled: true
+
+postgresql-ha:
+  enabled: false
+
+redis:
+  enabled: true
+
+redis-cluster:
+  enabled: false
+
+persistence:
+  enabled: true
+  storageClass: longhorn
+
+actions:
+  enabled: true
+  existingSecret: action-token
+  existingSecretKey: token
+  # provisioning:
+  #   enabled: true
+
+extraVolumes:
+  - name: gitea-themes
+    secret:
+      secretName: gitea-themes
+
+extraContainerVolumeMounts:
+  - name: gitea-themes
+    mountPath: "/data/gitea/public/assets/css"
