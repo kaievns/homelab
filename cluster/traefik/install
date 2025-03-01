@@ -1,0 +1,18 @@
+#! /bin/sh
+
+kubectl apply -f "$(dirname -- "$0")/middleware.yaml"
+kubectl apply -f "$(dirname -- "$0")/config.yaml"
+kubectl apply -f "$(dirname -- "$0")/dashboard.yaml"
+
+filename="$(dirname -- "$0")/_deployment.json"
+kubectl get deployment traefik -n kube-system -o json > $filename
+
+if ! grep -q dns-udp $filename; then
+  echo "Patching dns-udp port"
+  cat <<< $(jq '.spec.template.spec.containers[0].ports |= [{"containerPort": 53,"name": "dns-udp", "protocol": "UDP"}] + .' $filename) > $filename
+  kubectl delete deployment/traefik -n kube-system
+  kubectl apply -f  $filename
+  rm $filename
+else
+  echo "The DNS UDP port already patched, skipping..."
+fi
