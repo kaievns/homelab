@@ -1,8 +1,8 @@
 #! /bin/sh
 
-kubectl apply -f "$(dirname -- "$0")/middleware.yaml"
-kubectl apply -f "$(dirname -- "$0")/config.yaml"
-kubectl apply -f "$(dirname -- "$0")/dashboard.yaml"
+kubectl apply -f "$(dirname -- "$0")/crds/middleware.yaml"
+kubectl apply -f "$(dirname -- "$0")/crds/config.yaml"
+kubectl apply -f "$(dirname -- "$0")/crds/dashboard.yaml"
 
 filename="$(dirname -- "$0")/_deployment.json"
 kubectl get deployment traefik -n kube-system -o json > $filename

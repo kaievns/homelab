@@ -1,0 +1,14 @@
+#! /bin/sh
+
+helm install \
+  metallb oci://registry.suse.com/edge/metallb-chart \
+  --namespace metallb-system \
+  --create-namespace
+
+while ! kubectl wait --for condition=ready -n metallb-system $(kubectl get\
+ pods -n metallb-system -l app.kubernetes.io/component=controller -o name)\
+ --timeout=10s; do
+ sleep 2
+done
+
+kubectl apply -f "$(dirname -- "$0")/crds/ip-pool.yaml"
