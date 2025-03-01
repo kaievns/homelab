@@ -5,6 +5,7 @@ source "$(dirname -- "$0")/.env"
 kubectl create namespace pihole
 kubectl -n pihole create secret generic pihole-admin \
 	--from-literal="password=$ADMIN_PASSWORD"
+kubectl apply -f "$(dirname -- "$0")/crds.yaml"
 
 
 helm repo add mojo2600 https://mojo2600.github.io/pihole-kubernetes/
