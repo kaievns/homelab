@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockerd0-service
+  namespace: docker
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.68.69
+  selector:
+    statefulset.kubernetes.io/pod-name: dockerd-statefulset-0
+  ports:
+  - protocol: TCP
+    port: 22
+    targetPort: 22
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configs
+  namespace: docker
+data:
+  daemon.json: |-
+    {
+    	"insecure-registries":["registry.homelab"]
+    }
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dockerd-statefulset
+  namespace: docker
+spec:
+  selector:
+    matchLabels:
+      app: dockerd
+  serviceName: "dockerd"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dockerd
+    spec:
+      containers:
+      - name: docker-dind
+        image: nestybox/alpine-supervisord-docker:latest
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 22
+          name: ssh
+        volumeMounts:
+        - name: root-keys
+          mountPath: /root/.ssh
+        - name: docker-config
+          mountPath: /etc/docker/daemon.json
+          subPath: daemon.json
+          readOnly: true
+        - name: docker-cache
+          mountPath: /var/lib/docker
+      volumes:
+      - name: docker-config
+        configMap:
+          name: configs
+          items:
+            - key: daemon.json
+              path: daemon.json
+  volumeClaimTemplates:
+  - metadata:
+      name: root-keys
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "longhorn"
+      resources:
+        requests:
+          storage: 10Mi
+  - metadata:
+      name: docker-cache
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "longhorn"
+      resources:
+        requests:
+          storage: 50Gi
+  podManagementPolicy: Parallel
