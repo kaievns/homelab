@@ -1,0 +1,3 @@
+#! /bin/sh
+
+kubectl apply -f "$(dirname -- "$0")configs/manifest.yaml"
