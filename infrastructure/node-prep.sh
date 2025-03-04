@@ -1,5 +1,6 @@
 sudo dnf upgrade --refresh
 sudo dnf install nano btop
+sudo dnf remove cockpit
 
 echo "Disabling swap...."
 sudo swapoff -a

@@ -22,3 +22,6 @@ sleep 10
 
 ./cluster/longhorn/install
 sleep 60
+
+./cluster/observability/install
+# sleep 10

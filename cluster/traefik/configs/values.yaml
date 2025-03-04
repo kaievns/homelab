@@ -32,4 +32,4 @@ ports:
     protocol: UDP
 service:
   annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.68.33
+    metallb.universe.tf/loadBalancerIPs: 192.168.68.69
