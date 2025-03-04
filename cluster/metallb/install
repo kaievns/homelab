@@ -1,5 +1,7 @@
 #! /bin/sh
 
+echo "Setting up MetalLB..."
+
 helm install \
   metallb oci://registry.suse.com/edge/metallb-chart \
   --namespace metallb-system \
