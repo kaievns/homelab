@@ -1,5 +1,4 @@
 defaultSettings:
-  defaultDataPath: "/longhorn"
   defaultReplicaCount: 2
   nodeDrainPolicy: "always-allow"
 persistence:

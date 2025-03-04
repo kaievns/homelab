@@ -1,0 +1,10 @@
+#! /bin/sh
+
+echo "Setting up Longhorn..."
+
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+
+helm install longhorn longhorn/longhorn \
+    --create-namespace -n longhorn \
+    -f "$(dirname -- "$0")/configs/values.yaml"
