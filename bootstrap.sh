@@ -1,20 +1,33 @@
 #! /bin/sh
 
-ssh kai@192.168.68.1 'bash -s' < infrastructure/k0s-prep.sh
-ssh kai@192.168.68.2 'bash -s' < infrastructure/k0s-prep.sh
-ssh kai@192.168.68.3 'bash -s' < infrastructure/k0s-prep.sh
+nodes=( 
+    kai@192.168.68.1
+    kai@192.168.68.2 
+    kai@192.168.68.3
+)
+
+rm -rf logs/
+mkdir logs/
+
+run_on_all_nodes () {
+    for node in "${nodes[@]}"; do
+        echo "Running $1\n---------------------" >> logs/$node.log
+        ssh $node 'bash -s' < $1 >> logs/$node.log &
+    done
+    wait
+}
+
+echo "Running initial setups"
+run_on_all_nodes infrastructure/k0s-prep.sh
+sleep 10
 
 k0sctl apply --config infrastructure/k0s-config.yaml
-
 k0sctl kubeconfig --config infrastructure/k0s-config.yaml >  ~/.kube/config
+sleep 40
 
-sleep 30
-
-ssh kai@192.168.68.1 'bash -s' < infrastructure/k0s-post.sh
-ssh kai@192.168.68.2 'bash -s' < infrastructure/k0s-post.sh
-ssh kai@192.168.68.3 'bash -s' < infrastructure/k0s-post.sh
-
-sleep 30
+ecoh "Running the post-install patches"
+run_on_all_nodes infrastructure/k0s-post.sh
+sleep 40
 
 ./cluster/traefik/install
 sleep 10
@@ -22,12 +35,10 @@ sleep 10
 ./cluster/metallb/install
 sleep 20
 
-ssh kai@192.168.68.1 'bash -s' < cluster/longhorn/setup.sh
-ssh kai@192.168.68.2 'bash -s' < cluster/longhorn/setup.sh
-ssh kai@192.168.68.3 'bash -s' < cluster/longhorn/setup.sh
-
+echo "Running Longhorn prep scripts"
+run_on_all_nodes cluster/longhorn/setup.sh
 ./cluster/longhorn/install
 sleep 60
 
 ./cluster/observability/install
-# sleep 10
+# # sleep 10

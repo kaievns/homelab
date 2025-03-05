@@ -9,21 +9,21 @@ spec:
       user: kai
     role: controller+worker
     installFlags:
-    - --disable-components=konnectivity-server,autopilot
+    - --disable-components=konnectivity-server,metrics-server,autopilot
     - --no-taints
   - ssh:
       address: 192.168.68.2
       user: kai
     role: controller+worker
     installFlags:
-    - --disable-components=konnectivity-server,autopilot
+    - --disable-components=konnectivity-server,metrics-server,autopilot
     - --no-taints
   - ssh:
       address: 192.168.68.3
       user: kai
     role: controller+worker
     installFlags:
-    - --disable-components=konnectivity-server,autopilot
+    - --disable-components=konnectivity-server,metrics-server,autopilot
     - --no-taints
   k0s:
     config:
