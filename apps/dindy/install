@@ -3,9 +3,11 @@
 kubectl create namespace docker
 kubectl apply -f "$(dirname -- "$0")/configs/manifest.yaml"
 
+sleep 60
+
 kubectl exec -it dockerd-statefulset-0 -n docker -- passwd
 
-ssh-copy-id root@192.168.68.69
+ssh-copy-id root@192.168.68.88
 
-docker context create --docker host=ssh://root@192.168.68.69 homelab
+docker context create --docker host=ssh://root@192.168.68.88 homelab
 docker context use homelab
