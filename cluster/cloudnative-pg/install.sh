@@ -6,4 +6,4 @@ helm upgrade --install cnpg \
   --create-namespace \
   cnpg/cloudnative-pg
 
-kubectl apply -f cluster/cloudnative-pg/longhorn-postgres.yaml
+kubectl apply -f "$(dirname -- "$0")/longhorn-postgres.yaml"
