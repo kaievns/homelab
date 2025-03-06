@@ -23,22 +23,23 @@ sleep 10
 
 k0sctl apply --config infrastructure/k0s-config.yaml
 k0sctl kubeconfig --config infrastructure/k0s-config.yaml >  ~/.kube/config
-sleep 40
 
 ecoh "Running the post-install patches"
 run_on_all_nodes infrastructure/k0s-post.sh
-sleep 40
+sleep 5
 
-./cluster/traefik/install
-sleep 10
+./cluster/cilium/install
 
-./cluster/metallb/install
-sleep 20
+# ./cluster/traefik/install
+# sleep 10
 
-echo "Running Longhorn prep scripts"
-run_on_all_nodes cluster/longhorn/setup.sh
-./cluster/longhorn/install
-sleep 60
+# ./cluster/metallb/install
+# sleep 20
 
-./cluster/observability/install
-# # sleep 10
+# echo "Running Longhorn prep scripts"
+# run_on_all_nodes cluster/longhorn/setup.sh
+# ./cluster/longhorn/install
+# sleep 60
+
+# ./cluster/observability/install
+# # # sleep 10
