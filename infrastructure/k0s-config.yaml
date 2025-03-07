@@ -42,8 +42,6 @@ spec:
             kubeAPIserverUser: kube-apiserver
             kubeSchedulerUser: kube-scheduler
         network:
-          kubeProxy:
-            disabled: true
           podCIDR: 10.244.0.0/16
           provider: custom
           serviceCIDR: 10.96.0.0/12

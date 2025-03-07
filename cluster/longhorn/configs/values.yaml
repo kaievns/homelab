@@ -13,5 +13,7 @@ csi:
   kubeletRootDir: "/var/lib/k0s/kubelet"
 longhornUI:
   replicas: 1
-
-# /var/run/k0s/
+ingress:
+  enabled: true
+  host: longhorn.homelab
+  pathType: Prefix

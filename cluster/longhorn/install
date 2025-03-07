@@ -9,4 +9,4 @@ helm install longhorn longhorn/longhorn \
     --create-namespace -n longhorn \
     -f "$(dirname -- "$0")/configs/values.yaml"
 
-kubectl apply -f "$(dirname -- "$0")/configs/ingress.yaml"
+# kubectl apply -f "$(dirname -- "$0")/configs/ingress.yaml"

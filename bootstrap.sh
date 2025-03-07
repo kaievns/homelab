@@ -11,8 +11,8 @@ mkdir logs/
 
 run_on_all_nodes () {
     for node in "${nodes[@]}"; do
-        echo "Running $1\n---------------------" >> logs/$node.log
-        ssh $node 'bash -s' < $1 >> logs/$node.log &
+        echo "Running $1\n-------------------------" >> logs/$node.log
+        ssh $node 'bash -s' < $1 >> logs/$node.log 2>&1 &
     done
     wait
 }
@@ -28,18 +28,14 @@ ecoh "Running the post-install patches"
 run_on_all_nodes infrastructure/k0s-post.sh
 sleep 5
 
+echo "Running Cilium prep scripts"
+run_on_all_nodes cluster/cilium/setup.sh
 ./cluster/cilium/install
 
-# ./cluster/traefik/install
-# sleep 10
-
-# ./cluster/metallb/install
-# sleep 20
-
-# echo "Running Longhorn prep scripts"
-# run_on_all_nodes cluster/longhorn/setup.sh
-# ./cluster/longhorn/install
-# sleep 60
+echo "Running Longhorn prep scripts"
+run_on_all_nodes cluster/longhorn/setup.sh
+./cluster/longhorn/install
+sleep 60
 
 # ./cluster/observability/install
 # # # sleep 10
