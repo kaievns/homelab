@@ -3,11 +3,7 @@ app:
     enabled: true
     hosts:
       - kubes.homelab
-    ingressClassName: traefik
     pathType: Prefix
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls: "true"
 extras:
   serviceMonitor:
     enabled: true
