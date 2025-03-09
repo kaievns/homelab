@@ -2,10 +2,20 @@
 
 echo "Setting up Traefik...."
 
-helm repo add traefik https://traefik.github.io/charts
-helm repo update
-
-helm upgrade --install traefik traefik/traefik -n kube-system -f "$(dirname -- "$0")/configs/values.yaml"
-
+kubectl apply -f "$(dirname -- "$0")/configs/config.yaml"
 kubectl apply -f "$(dirname -- "$0")/configs/middleware.yaml"
 kubectl apply -f "$(dirname -- "$0")/configs/dashboard.yaml"
+
+
+filename="$(dirname -- "$0")/_deployment.json"
+kubectl get deployment traefik -n kube-system -o json > $filename
+
+if ! grep -q dns-udp $filename; then
+  echo "Patching dns-udp port"
+  cat <<< $(jq '.spec.template.spec.containers[0].ports |= [{"containerPort": 53,"name": "dns-udp", "protocol": "UDP"}] + .' $filename) > $filename
+  kubectl delete deployment/traefik -n kube-system
+  kubectl apply -f  $filename
+  rm $filename
+else
+  echo "The DNS UDP port already patched, skipping..."
+fi
