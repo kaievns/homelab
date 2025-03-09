@@ -1,6 +1,7 @@
 sudo dnf upgrade --refresh -y
 sudo dnf install nano btop -y
 sudo dnf remove cockpit -y
+sudo dnf install wireguard-tools -y
 
 echo "Disabling swap...."
 sudo swapoff -a
@@ -17,6 +18,10 @@ sudo firewall-cmd --permanent --add-service=https
 sudo firewall-cmd --permanent --add-port=6443/tcp #apiserver
 sudo firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 #pods
 sudo firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
+
+sudo firewall-cmd --permanent --zone=trusted --add-source=192.168.68.1 #node1
+sudo firewall-cmd --permanent --zone=trusted --add-source=192.168.68.2 #node2
+sudo firewall-cmd --permanent --zone=trusted --add-source=192.168.68.3 #node3
 
 sudo firewall-cmd --reload
 
