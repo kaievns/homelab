@@ -1,6 +1,6 @@
 #! /bin/sh
 
-source "$(dirname -- "$0")/.env"
+source "$(dirname -- "$0")/configs/.env"
 
 helm repo add gitea-charts https://dl.gitea.com/charts/
 helm repo update
@@ -28,6 +28,7 @@ EOF
 
 
 kubectl create secret generic gitea-themes -n gitea --from-file="/Users/kai/Downloads/gitea-themes"
-kubectl apply -f "$(dirname -- "$0")/crds.yaml"
+kubectl apply -f "$(dirname -- "$0")/configs/crds.yaml"
 
-helm install gitea gitea-charts/gitea -n gitea  -f "$(dirname -- "$0")/values.yaml"
+helm install gitea gitea-charts/gitea -n gitea \
+  -f "$(dirname -- "$0")/configs/values.yaml"

@@ -1,14 +1,17 @@
 #! /bin/sh
 
-source "$(dirname -- "$0")/.env"
+source "$(dirname -- "$0")/configs/.env"
 
 kubectl create namespace pihole
 kubectl -n pihole create secret generic pihole-admin \
 	--from-literal="password=$ADMIN_PASSWORD"
-kubectl apply -f "$(dirname -- "$0")/crds.yaml"
-
 
 helm repo add mojo2600 https://mojo2600.github.io/pihole-kubernetes/
 helm repo update
 
-helm install pihole mojo2600/pihole  -n pihole -f "$(dirname -- "$0")/values.yaml"
+helm install pihole mojo2600/pihole -n pihole --version 2.28.0 \
+   -f "$(dirname -- "$0")/configs/values.yaml"
+
+sleep 30
+
+kubectl apply -f "$(dirname -- "$0")/configs/crds.yaml"
