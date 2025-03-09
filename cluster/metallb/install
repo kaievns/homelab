@@ -13,4 +13,6 @@ while ! kubectl wait --for condition=ready -n metallb-system $(kubectl get\
  sleep 2
 done
 
+sleep 10
+
 kubectl apply -f "$(dirname -- "$0")/crds/ip-pool.yaml"

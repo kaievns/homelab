@@ -9,21 +9,21 @@ spec:
       user: kai
     role: controller+worker
     installFlags:
-    - --disable-components=konnectivity-server,metrics-server,autopilot,helm,kube-proxy,windows-node
+    - --disable-components=konnectivity-server,metrics-server,autopilot,helm,windows-node
     - --no-taints
   - ssh:
       address: 192.168.68.2
       user: kai
     role: controller+worker
     installFlags:
-    - --disable-components=konnectivity-server,metrics-server,autopilot,helm,kube-proxy,windows-node
+    - --disable-components=konnectivity-server,metrics-server,autopilot,helm,windows-node
     - --no-taints
   - ssh:
       address: 192.168.68.3
       user: kai
     role: controller+worker
     installFlags:
-    - --disable-components=konnectivity-server,metrics-server,autopilot,helm,kube-proxy,windows-node
+    - --disable-components=konnectivity-server,metrics-server,autopilot,helm,windows-node
     - --no-taints
   k0s:
     config:
@@ -42,8 +42,16 @@ spec:
             kubeAPIserverUser: kube-apiserver
             kubeSchedulerUser: kube-scheduler
         network:
+          kubeProxy:
+            disabled: false
+            mode: iptables
+          kuberouter:
+            autoMTU: true
+            mtu: 0
+            peerRouterASNs: ""
+            peerRouterIPs: ""
           podCIDR: 10.244.0.0/16
-          provider: custom
+          provider: kuberouter
           serviceCIDR: 10.96.0.0/12
         podSecurityPolicy:
           defaultPolicy: 00-k0s-privileged
