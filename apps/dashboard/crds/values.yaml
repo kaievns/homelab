@@ -1,9 +1,0 @@
-app:
-  ingress:
-    enabled: true
-    hosts:
-      - kubes.homelab
-    pathType: Prefix
-extras:
-  serviceMonitor:
-    enabled: true

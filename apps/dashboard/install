@@ -1,12 +1,16 @@
 #! /bin/sh
 
-https://kubernetes.github.io/dashboard
-
 helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard
 helm repo update
 
 helm install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
   -n kubernetes-dashboard --create-namespace \
-  -f $(dirname -- "$0")/crds/values.yaml
+  -f $(dirname -- "$0")/configs/values.yaml
 
-kubectl apply -f "$(dirname -- "$0")/crds/rbac.yaml"
+kubectl apply -f "$(dirname -- "$0")/configs/rbac.yaml"
+kubectl apply -f "$(dirname -- "$0")/configs/ingress.yaml"
+
+sleep 30
+
+echo "And here is your token"
+kubectl -n kubernetes-dashboard create token admin-user

@@ -1,0 +1,10 @@
+# app:
+#   ingress:
+#     enabled: true
+#     hosts:
+#       - kubes.homelab
+#     pathType: Prefix
+#     ingressClassName: traefik
+extras:
+  serviceMonitor:
+    enabled: true
