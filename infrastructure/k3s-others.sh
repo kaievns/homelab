@@ -6,5 +6,5 @@ sh -s - server \
   --server https://[IP]:6443 \
   --cluster-init \
   --flannel-backend=wireguard-native \
-  --disable=servicelb,metrics-server \
+  --disable=servicelb \
   --disable-cloud-controller
