@@ -1,32 +1,40 @@
-sudo dnf upgrade --refresh -y
-sudo dnf install nano btop -y
-sudo dnf remove cockpit -y
-sudo dnf install wireguard-tools -y
+echo "Setting up passwordless sudo...."
+echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-$USER-for-sudo-password"
+
+echo "Running updates"
+sudo apt update
+sudo apt upgrade -y
+sudo apt install nano btop -y
+
+echo "Disabling snaps"
+sudo systemctl stop snapd
+sudo systemctl mask snapd
+sudo apt remove --purge snapd -y
+sudo apt-mark hold snapd
 
 echo "Disabling swap...."
 sudo swapoff -a
-sudo dnf remove zram-generator -y
+sudo nano /etc/fstab
 
-echo "Punching holes in firewall....."
-sudo systemctl enable firewalld
-sudo systemctl start firewalld
+echo "Punching holes in the firewall....."
+sudo apt install ufw -y
+sudo ufw enable
 
-sudo firewall-cmd --permanent --add-service=dns
-sudo firewall-cmd --permanent --add-service=http
-sudo firewall-cmd --permanent --add-service=https
+sudo ufw allow from 192.168.68.0/24 to any port 22 comment "SSH: allow SSH access from home"
+sudo ufw allow from 192.168.68.0/24 to any port 53 comment "DNS: from home for pihole"
 
-sudo firewall-cmd --permanent --add-port=6443/tcp #apiserver
-sudo firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 #pods
-sudo firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
+sudo ufw allow from 192.168.68.0/24 to any port 80 comment "Traefik HTTP access from home"
+sudo ufw allow from 192.168.68.0/24 to any port 443 comment "Traefik HTTPS access from home"
 
-sudo firewall-cmd --permanent --zone=trusted --add-source=192.168.68.1 #node1
-sudo firewall-cmd --permanent --zone=trusted --add-source=192.168.68.2 #node2
-sudo firewall-cmd --permanent --zone=trusted --add-source=192.168.68.3 #node3
+sudo ufw allow from 192.168.68.0/24 to any port 6443 comment "K3S: kubes api from home"
 
-sudo firewall-cmd --reload
+sudo ufw allow from 10.42.0.0/16 to any comment "K3S: pods"
+sudo ufw allow from 10.43.0.0/16 to any comment "K3S: services"
+sudo ufw allow from 192.168.68.0/28 to any comment "K3S: other direct node to node traffic"
 
-echo "Setting up passwordless sudo...."
-echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-$USER-for-sudo-password"
+## patching Grub
+sudo nano /etc/default/grub
+sudo update-grub
 
 echo "Rebooting now ...."
 sudo reboot
