@@ -43,4 +43,7 @@ for index in "${!nodes[@]}"; do
         run_on ${nodes[$index]} secondary.sh
         rm secondary.sh
     fi
+
+    ssh ${nodes[$index]} 'bash -s' < ./cluster/longhorn/setup.sh
+    ssh ${nodes[$index]} 'bash -s' < ./apps/registry/setup.sh
 done

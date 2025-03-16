@@ -11,7 +11,7 @@ reclaimPolicy: Delete
 parameters:
   numberOfReplicas: "1"
   staleReplicaTimeout: "1440" # 1 day
-  fsType: "ext4"
+  fsType: "xfs"
   dataLocality: "strict-local"
   recurringJobSelector: '[
     {
