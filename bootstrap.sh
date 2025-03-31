@@ -1,9 +1,9 @@
 #! /bin/sh
 
 nodes=( 
-    kai@192.168.68.1
-    kai@192.168.68.2 
-    kai@192.168.68.3
+    kai@192.168.1.1
+    kai@192.168.1.2 
+    kai@192.168.1.3
 )
 
 rm -rf logs/
@@ -33,7 +33,7 @@ for index in "${!nodes[@]}"; do
 
         echo "Copying over the kubes config"
         ssh ${nodes[$index]} 'sudo k3s kubectl config view --raw' | \
-            sed -e 's/127.0.0.1:6443/192.168.68.1:6443/' > ~/.kube/config
+            sed -e 's/127.0.0.1:6443/192.168.1.1:6443/' > ~/.kube/config
 
         token=$(ssh ${nodes[$index]} 'sudo cat /var/lib/rancher/k3s/server/node-token')
     else

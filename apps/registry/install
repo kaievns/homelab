@@ -2,5 +2,5 @@
 
 kubectl apply -f "$(dirname -- "$0")/configs/manifest.yaml"
 
-# add 192.168.68.89 registry.homelab to hosts so that DIND could resolve it
+# add 192.168.1.89 registry.homelab to hosts so that DIND could resolve it
 EDITOR=nano kubectl edit cm coredns -n kube-system
