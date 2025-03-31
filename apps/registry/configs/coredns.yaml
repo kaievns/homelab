@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-registry
+  namespace: kube-system
+data:
+  internal-custom.override: |
+    rewrite stop {
+      name registry.homelab registry.registry.svc.cluster.local
+    }

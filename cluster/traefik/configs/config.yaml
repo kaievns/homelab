@@ -5,6 +5,13 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    deployment:
+      kind: DaemonSet
+    service:
+      type: LoadBalancer
+      spec:
+        externalTrafficPolicy: Local
+    hostNetwork: true
     additionalArguments:
       - "--api"
       - "--api.dashboard=true"

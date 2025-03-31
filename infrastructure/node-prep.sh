@@ -5,6 +5,10 @@ echo "Running updates"
 sudo apt update
 sudo apt upgrade -y
 sudo apt install nano btop -y
+sudo apt install wireguard resolvconf -y
+
+echo "net.ipv4.ip_forward = 1" | sudo tee /etc/sysctl.conf
+sudo sysctl -p
 
 echo "Disabling snaps"
 sudo systemctl stop snapd
