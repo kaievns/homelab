@@ -16,3 +16,5 @@ ingress:
   enabled: true
   host: longhorn.homelab
   pathType: Prefix
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-basic-auth@kubernetescrd
