@@ -13,4 +13,4 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install loki grafana/loki-stack -n observability -f "$(dirname -- "$0")/configs/loki.yaml"
 
-kubectl apply -f "$(dirname -- "$0")/configs/graphana.yaml"
+kubectl apply -f "$(dirname -- "$0")/configs/loki-ingress.yaml"

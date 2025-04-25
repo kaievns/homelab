@@ -1,6 +1,5 @@
 kubeEtcd:
   enabled: false
-
 kubeControllerManager:
   enabled: false
 kubeScheduler:
@@ -15,7 +14,18 @@ prometheus:
       traefik.ingress.kubernetes.io/router.middlewares: default-basic-auth@kubernetescrd
 
   prometheusSpec:
-    retention: 7d
+    retention: 14d
+    enableRemoteWriteReceiver: true
+    additionalScrapeConfigs:
+      - job_name: "home-router"
+        scrape_interval: 10s
+        static_configs:
+          - targets:
+              - "home-router.lan:9100"
+              - "home-router.lan:9103"
+              - "home-router.lan:9617"
+            labels:
+              group: "home-router"
     storageSpec:
       volumeClaimTemplate:
         metadata:
@@ -26,11 +36,9 @@ prometheus:
           storageClassName: longhorn
           resources:
             requests:
-              storage: 5Gi
+              storage: 200Gi
 
 grafana:
-  plugins:
-    - grafana-piechart-panel
   enabled: true
   ingress:
     enabled: true
@@ -49,13 +57,36 @@ grafana:
       org_role: Admin
     auth.basic:
       enabled: false
-
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki.observability.svc.cluster.local:3100
+      isDefault: false
+      jsonData:
+        maxLines: 1000
+        queryType: logs
+  plugins:
+    - grafana-piechart-panel
   persistence:
     enabled: true
     type: pvc
     storageClassName: longhorn
     accessModes:
       - ReadWriteOnce
-    size: 5Gi
+    size: 10Gi
     finalizers:
       - kubernetes.io/pvc-protection
+
+alertmanager:
+  ingress:
+    enabled: true
+    hosts:
+      - alerts.homelab
+    annotations:
+      traefik.ingress.kubernetes.io/router.middlewares: default-basic-auth@kubernetescrd
