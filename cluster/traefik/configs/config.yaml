@@ -43,6 +43,18 @@ spec:
           default: true
         exposedPort: 53
         protocol: UDP
+      rdp-tcp:
+        port: 3390
+        expose: 
+          default: true
+        exposedPort: 3389
+        protocol: TCP
+      rdp-udp:
+        port: 3390
+        expose: 
+          default: true
+        exposedPort: 3389
+        protocol: UDP
     service:
       annotations:
         metallb.universe.tf/loadBalancerIPs: 192.168.1.69

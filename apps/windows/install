@@ -1,0 +1,4 @@
+#! /bin/sh
+
+echo "Applying the manifest"
+kubectl apply -f "$(dirname -- "$0")/configs/manifest.yaml"
